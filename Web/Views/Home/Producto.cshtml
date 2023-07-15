@@ -1,0 +1,16 @@
+﻿@using API.Models;
+@model Producto
+@{
+    ViewData["Title"] = "Producto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="card ">
+<div class="card-header">
+    <h3>@Model.Titulo</h3>
+</div>
+<div class="card-body">
+    <h5> Descripcion: @Model.Descripcion</h5> <br />
+    <h5> Costo unitario: $@Model.PrecioUnitario</h5><br />
+    <h5> Existencias: @Model.Existencias</h5><br />
+</div>
+</div>

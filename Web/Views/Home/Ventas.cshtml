@@ -1,0 +1,74 @@
+﻿@using API.Models;
+@model List<SelectListItem>
+@{
+    ViewData["Title"] = "Ventas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="card">
+    <div class="card-header">
+    <h3>Ventas general</h3>
+    </div>
+    <div class="card-body">
+        <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+            <div class="card-header">Total de Productos:</div>
+            <div class="card-body">
+                <p class="card-text">@ViewBag.TotalProd</p>
+            </div>
+        </div>
+        <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+            <div class="card-header">Total de Ventas:</div>
+            <div class="card-body">
+                <p class="card-text">@ViewBag.TotalVentas</p>
+            </div>
+        </div>
+        <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+            <div class="card-header">Producto más vendido:</div>
+            <div class="card-body">
+                <p class="card-text">@ViewBag.prodMasVendido</p>
+            </div>
+        </div>
+        <div class="card text-white bg-secondary mb-3" style="max-width: 18rem;">
+            <div class="card-header">Pedir a Proveedor:</div>
+            <div class="card-body">
+                <p class="card-text">@ViewBag.Notificacion</p>
+            </div>
+        </div>
+  
+</div>
+</div>
+    <div class="card">
+<div class="card-header">
+    <h3>Ventas por Producto</h3>
+    </div>
+
+<div class="card-body">
+    <div class="col-md-6 col-md-offset-3">
+        <div class="form-group">
+            
+            @Html.DropDownList("ProExist",Model,new { @class = "form-control", id="ProductoVentas" })
+        </div>
+    </div></br>
+    <a>Total Vendidos: </a><a id="total">0</a>
+    
+</div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+    $(document).ready(function () {
+        $('#ProductoVentas').change(function () {
+            var id = $(this).val(); 
+            $.ajax({
+                type: 'GET',
+                url: '@Url.Action("VTxProducto", "Home")',
+                data: { id: id },
+                success: function (response) { $('#total').text(response); },
+                error: function () {alert('Error al obtener el texto.'); }
+            });
+        });
+    });
+</script>
+
+
+

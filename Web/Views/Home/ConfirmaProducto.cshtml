@@ -1,0 +1,17 @@
+﻿@using API.Models;
+@model Producto
+@{
+    ViewData["Title"] = "ConfirmaProducto";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="card text-center">
+    <div class="card-body">
+    <div class="card-text">
+    <h4>SE HA AGREGADO EL PRODUCTO</h4>
+    <h5>@Model.Titulo</h5>
+    <h5>@Model.Descripcion</h5>
+    <h4>AL CARRO DE COMPRA</h4></br>
+    <a asp-action="RegresaIndex" asp-controller="Home" class="btn btn-primary btn-lg">Seguir Comprando</a>
+        </div>
+    </div>
+</div>

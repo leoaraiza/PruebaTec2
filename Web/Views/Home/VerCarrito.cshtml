@@ -1,0 +1,81 @@
+﻿@using API.Models;
+@model List<ProductoCompra>
+@{
+    ViewData["Title"] = "VerCarrito";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="card">
+    <div class="card-header">
+        <h3>CARRITO</h3>
+    </div>
+    <div class="card-body">
+<form method="post" action="/Home/Compra">
+    <div class="card">
+    <table>
+        <thead>
+            <tr>
+                <th style="text-align:center">Codigo</th>
+                <th>Nombre</th>
+                <th>Descripcion</th>
+                <th>Costo</th>
+                <th>Cantidad</th>
+                <th>SubTotal</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            
+            @{ var total = Model.Sum(item => item.Subtotal);}
+            @for (var i = 0; i < Model.Count; i++)
+            {
+                <tr>
+                    <td style="text-align:center">@Model[i].Idproductos</td>
+                    <td>@Model[i].Titulo</td>
+                    <td>@Model[i].Descripcion</td>
+                    <td>$@Model[i].PrecioUnitario</td>
+                    
+                    @{var idproducto = Model[i].Idproductos;}
+                               
+                    <td>
+                        <input type="number" id="cantidad @i" name="list[@i].Cantidad" value="@Model[i].Cantidad" onchange="calcularResultado(@idproducto, @i)" min="1" />
+                        <input type="hidden" name="list[@i].Idproductos" value="@Model[i].Idproductos" />
+                        <input type="hidden" name="list[@i].Titulo" value="@Model[i].Titulo" />
+                        <input type="hidden" name="list[@i].Descripcion" value="@Model[i].Descripcion" />
+                        <input type="hidden" name="list[@i].PrecioUnitario" value="@Model[i].PrecioUnitario" />
+                    </td>
+                    <td id="subtotal @i">@Model[i].Subtotal</td>
+
+                    <td>
+                         <a asp-action="EliminarProducto" asp-controller="Home" asp-route-index="@i" class="btn btn-primary btn-sm">Eliminar</a>
+                    </td>
+                </tr>               
+            }        
+        </tbody>
+    </table>
+    </div></br>
+    <input class="btn btn-primary btn-sm" type="submit" value="COMPRAR" />
+    <a>TOTAL:</a><a id="total">@total </a>
+
+</form>
+    </div>
+</div>
+
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+<script>
+
+    function calcularResultado(id, iterador) {
+        var cad = "cantidad " + iterador.toString();
+        var inputNumero = document.getElementById(cad);
+        var valorInput = inputNumero.value;
+        $.ajax({
+            type: 'GET',
+            url: '@Url.Action("modifCantCarrito", "Home")',
+            data: { productoId: id,cantidad: valorInput},
+            success: function (response) {location.reload();},
+            error: function () {alert('Error al procesar controlador.');}
+        });      
+    }
+    
+</script>
