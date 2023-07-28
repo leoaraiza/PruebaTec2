@@ -18,10 +18,10 @@ namespace Escritorio
 {
     public partial class ResumenVentas : Form
     {
-        string valor;
+        string valor = "";
         int? CantidadVentas;
-        List<Producto> productos;
-        List<Venta> ventas;
+        public List<Producto> productos;
+        public List<Venta> ventas;
         public ResumenVentas()
         {
             InitializeComponent();
@@ -30,8 +30,8 @@ namespace Escritorio
         private async void ResumenVentas_Load(object sender, EventArgs e)
         {
             Servicios http = new Servicios();
-            var  productos = await http.GetListaProductos();
-            var ventas = await http.GetVentas();
+            productos = await http.GetListaProductos();
+            ventas = await http.GetVentas();
 
             List<string> nombrePro = new List<string>();
             foreach (var item in productos)
@@ -51,17 +51,18 @@ namespace Escritorio
             int? maxVenta = ventas.Max(x => x.CantidadVendida);
             var idProdMasVendido = (from a in ventas where a.CantidadVendida == maxVenta select a.Idproductos).FirstOrDefault();
             var prodMasVendido = (from a in productos where a.Idproductos == idProdMasVendido select a.Titulo).FirstOrDefault();
-            comboBox1.DataSource = nombrePro;
+            
             label6.Text = totalVentas;
             label7.Text = prodMasVendido.ToString();
             label8.Text = totalProd;
             label9.Text = notificacionPro;
+            comboBox1.DataSource = nombrePro;
         }
 
         private void comboBox1_SelectedIndexChanged(object sender, EventArgs e)
         {
             this.valor = comboBox1.SelectedItem.ToString();
-            var idProdSeleccionado = (from a in productos where a.Titulo == this.valor select a.Idproductos).FirstOrDefault();
+            var idProdSeleccionado =(from a in productos where a.Titulo == this.valor select a.Idproductos).FirstOrDefault();
             this.CantidadVentas = (from a in ventas where a.Idproductos == idProdSeleccionado select a.CantidadVendida).Sum();
             if (this.CantidadVentas == null)
             { this.CantidadVentas = 0; }
